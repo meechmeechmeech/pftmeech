@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>pftmeech — PostFiat Validator</title>
+<meta name="description" content="pftmeech.xyz — a Post Fiat testnet validator operated by @meeeeechh." />
+<style>
+  :root{
+    --bg:#0a0e17; --panel:#111726; --panel2:#0e1420; --line:#1e2740;
+    --text:#e6ebf5; --muted:#8a97b1; --accent:#4ade80; --accent2:#38bdf8;
+    --mono:'SFMono-Regular',ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(1200px 600px at 50% -10%,#152036 0%,var(--bg) 55%);
+    color:var(--text);font-family:var(--sans);line-height:1.5;
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;
+    padding:48px 20px;
+  }
+  .wrap{width:100%;max-width:680px}
+  header{text-align:center;margin-bottom:32px}
+  .badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:6px 14px;margin-bottom:22px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 0 rgba(74,222,128,.6);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.5)}70%{box-shadow:0 0 0 10px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+  h1{font-size:44px;margin:0;letter-spacing:-.02em;
+    background:linear-gradient(90deg,#fff,#9fb2d6);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);font-size:15px;margin-top:6px}
+  .handle{font-family:var(--mono);color:var(--accent2);font-size:14px;margin-top:10px;text-decoration:none}
+  .handle:hover{text-decoration:underline}
+  .card{background:linear-gradient(180deg,var(--panel),var(--panel2));
+    border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:18px}
+  .label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .keyrow{display:flex;align-items:center;gap:10px;background:#0a0f1a;border:1px solid var(--line);
+    border-radius:10px;padding:12px 14px}
+  .keyval{font-family:var(--mono);font-size:13px;color:var(--text);word-break:break-all;flex:1}
+  .copy{cursor:pointer;border:1px solid var(--line);background:#131b2c;color:var(--muted);
+    border-radius:8px;padding:7px 12px;font-size:12px;font-family:var(--mono);white-space:nowrap;transition:.15s}
+  .copy:hover{color:var(--text);border-color:var(--accent2)}
+  .copy.done{color:var(--accent);border-color:var(--accent)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .cell{background:var(--panel2);padding:16px 18px}
+  .cell .k{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .cell .v{font-size:16px;margin-top:6px}
+  .cell .v .flag{margin-right:6px}
+  .status-live{display:flex;align-items:center;gap:8px;font-size:16px}
+  .cta{display:flex;align-items:center;justify-content:center;gap:10px;
+    background:linear-gradient(90deg,#1b3a5c,#14324e);border:1px solid #2b4d72;
+    color:#dbeafe;text-decoration:none;border-radius:12px;padding:16px;font-size:15px;font-weight:600;
+    transition:.15s;width:100%}
+  .cta:hover{border-color:var(--accent2);transform:translateY(-1px)}
+  footer{color:var(--muted);font-size:12px;text-align:center;margin-top:14px;font-family:var(--mono)}
+  footer a{color:var(--muted)}
+  @media(max-width:520px){h1{font-size:34px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="badge"><span class="dot"></span><span id="netstate">Post Fiat · Testnet</span></div>
+    <h1>pftmeech</h1>
+    <div class="sub">Post Fiat Testnet Validator</div>
+    <a class="handle" href="https://x.com/meeeeechh" target="_blank" rel="noopener">@meeeeechh</a>
+  </header>
+
+  <div class="card">
+    <div class="label">Validator Public Key</div>
+    <div class="keyrow">
+      <span class="keyval" id="pubkey">nHBVTAUpHEoEctXcAWyC7nJhxUYULWKz1WZCuC1tSm2VnCxDshVS</span>
+      <button class="copy" id="copyBtn" onclick="copyKey()">Copy</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Details</div>
+    <div class="grid">
+      <div class="cell"><div class="k">Network</div><div class="v">Testnet</div></div>
+      <div class="cell"><div class="k">Domain</div><div class="v">pftmeech.xyz</div></div>
+      <div class="cell"><div class="k">Role</div><div class="v">Validator</div></div>
+      <div class="cell"><div class="k">Latest Validated Ledger</div><div class="v"><span class="status-live"><span class="dot"></span><span id="ledger">—</span></span></div></div>
+    </div>
+  </div>
+
+  <a class="cta" href="https://explorer.testnet.postfiat.org/network/validators" target="_blank" rel="noopener">
+    View live status &amp; score on the PFT Explorer →
+  </a>
+
+  <footer>
+    pftmeech.xyz · Post Fiat validator · <a href="https://postfiat.org" target="_blank" rel="noopener">postfiat.org</a>
+  </footer>
+</div>
+
+<script>
+function copyKey(){
+  var k=document.getElementById('pubkey').textContent.trim();
+  var b=document.getElementById('copyBtn');
+  navigator.clipboard.writeText(k).then(function(){
+    b.textContent='Copied';b.classList.add('done');
+    setTimeout(function(){b.textContent='Copy';b.classList.remove('done')},1600);
+  }).catch(function(){});
+}
+// Best-effort live ledger index from the public testnet RPC.
+// If the endpoint blocks cross-origin requests, we silently fall back to the Explorer link.
+(async function(){
+  try{
+    var r=await fetch('https://rpc.testnet.postfiat.org',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({method:'server_info',params:[{}]})
+    });
+    var j=await r.json();
+    var info=j.result&&j.result.info||{};
+    var seq=(info.validated_ledger&&info.validated_ledger.seq)||null;
+    if(!seq&&info.complete_ledgers){var parts=String(info.complete_ledgers).split('-');seq=parts[parts.length-1];}
+    if(seq){document.getElementById('ledger').textContent='#'+Number(seq).toLocaleString();}
+    else{document.getElementById('ledger').textContent='see Explorer →';}
+  }catch(e){
+    document.getElementById('ledger').textContent='see Explorer →';
+  }
+})();
+</script>
+</body>
+</html>
